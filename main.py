@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ProcUP — Автоматизация для малого бизнеса</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --a:#4A9FD4;
+  --a2:#2d7fb8;
+  --a3:#e8f4fc;
+  --a4:rgba(74,159,212,.12);
+  --dark:#080e1a;
+  --dark2:#111827;
+  --mid:#1e293b;
+  --muted:#64748b;
+  --border:rgba(255,255,255,.07);
+  --border2:#e2e8f0;
+  --bg:#ffffff;
+  --bg2:#f8fafc;
+  --r:18px;
+  --sh:0 4px 32px rgba(8,14,26,.08);
+  --sh2:0 16px 56px rgba(8,14,26,.14);
+  --tr:.28s cubic-bezier(.4,0,.2,1);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;color:#334155;background:#fff;line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:pointer}
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#f1f5f9}
+::-webkit-scrollbar-thumb{background:var(--a);border-radius:99px}
+/* UTIL */
+.wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 28px}
+.sec{padding:104px 0}
+.sec--dark{background:var(--dark2);color:#fff}
+.sec--alt{background:var(--bg2)}
+.tag{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--a);background:var(--a3);padding:5px 13px;border-radius:99px;margin-bottom:16px}
+.tag--white{color:#fff;background:rgba(255,255,255,.1)}
+.h1{font-family:'Manrope',sans-serif;font-size:clamp(38px,5.5vw,68px);font-weight:800;line-height:1.08;letter-spacing:-.02em}
+.h2{font-family:'Manrope',sans-serif;font-size:clamp(28px,4vw,46px);font-weight:800;line-height:1.15;letter-spacing:-.015em;color:#0f172a}
+.h2--white{color:#fff}
+.sub{font-size:17px;color:var(--muted);line-height:1.7;max-width:560px}
+.sub--white{color:rgba(255,255,255,.6)}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:9px;font-size:15px;font-weight:600;padding:14px 30px;border-radius:12px;border:none;transition:transform var(--tr),box-shadow var(--tr),background var(--tr)}
+.btn--fill{background:var(--a);color:#fff}
+.btn--fill:hover{background:var(--a2);transform:translateY(-2px);box-shadow:0 10px 32px rgba(74,159,212,.38)}
+.btn--ghost{background:transparent;color:var(--a);border:2px solid var(--a)}
+.btn--ghost:hover{background:var(--a3);transform:translateY(-2px)}
+.btn--dark{background:#fff;color:var(--dark2)}
+.btn--dark:hover{background:#e8f4fc;transform:translateY(-2px)}
+/* FADE UP */
+.fu{opacity:0;transform:translateY(36px);transition😮pacity .65s ease,transform .65s ease}
+.fu.on{opacity:1;transform:none}
+.fu[data-d="1"]{transition-delay:.1s}
+.fu[data-d="2"]{transition-delay:.2s}
+.fu[data-d="3"]{transition-delay:.3s}
+.fu[data-d="4"]{transition-delay:.4s}
+/* ═══════════════ NAVBAR ═══════════════ */
+.nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border2);transition:box-shadow var(--tr)}
+.nav.scrolled{box-shadow:0 2px 20px rgba(8,14,26,.08)}
+.nav__in{display:flex;align-items:center;justify-content:space-between;height:70px;gap:24px}
+.nav__logo{display:flex;align-items:center;gap:12px;font-family:'Manrope',sans-serif;font-size:22px;font-weight:800;color:#0f172a;letter-spacing:-.01em}
+.nav__logo-icon{width:40px;height:40px;border-radius:11px;background:var(--a);display:flex;align-items:center;justify-content:center}
+.nav__logo-icon svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.nav__links{display:flex;align-items:center;gap:30px}
+.nav__links a{font-size:14px;font-weight:500;color:var(--muted);transition:color var(--tr);white-space:nowrap}
+.nav__links a:hover{color:var(--a)}
+.nav__cta{display:flex;align-items:center;gap:10px}
+.nav__burger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:5px}
+.nav__burger span{display:block;width:24px;height:2px;background:#0f172a;border-radius:2px;transition:transform var(--tr),opacity var(--tr)}
+.mob{display:none;flex-direction:column;background:#fff;border-bottom:1px solid var(--border2);padding:14px 0 22px}
+.mob.open{display:flex}
+.mob a{padding:13px 28px;font-size:15px;font-weight:500;color:#334155;transition:color var(--tr),background var(--tr)}
+.mob a:hover{color:var(--a);background:var(--a3)}
+.mob .btn{margin:12px 28px 0;justify-content:center}
+/* ═══════════════ HERO ═══════════════ */
+.hero{min-height:92vh;display:flex;align-items:center;position:relative;overflow:hidden;background:var(--dark)}
+.hero__bg{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.hero__blob{position:absolute;border-radius:50%;filter:blur(100px);animation:blobMove 8s ease-in-out infinite alternate}
+.hero__blob--1{width:700px;height:700px;background:rgba(74,159,212,.18);top:-200px;right:-200px;animation-delay:0s}
+.hero__blob--2{width:500px;height:500px;background:rgba(74,159,212,.1);bottom:-150px;left:-100px;animation-delay:3s}
+.hero__blob--3{width:300px;height:300px;background:rgba(45,127,184,.15);top:40%;left:40%;animation-delay:1.5s}
+@keyframes blobMove{0%{transform:translate(0,0) scale(1)}100%{transform:translate(30px,20px) scale(1.08)}}
+.hero__grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(74,159,212,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(74,159,212,.05) 1px,transparent 1px);background-size:64px 64px}
+.hero__in{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;padding:100px 0}
+.hero__label{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:rgba(255,255,255,.7);background:rgba(255,255,255,.08);padding:7px 16px;border-radius:99px;border:1px solid rgba(255,255,255,.1);margin-bottom:28px;backdrop-filter:blur(8px)}
+.hero__label-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+.hero__title{color:#fff;margin-bottom:24px}
+.hero__title span{color:var(--a)}
+.hero__sub{color:rgba(255,255,255,.6);font-size:18px;line-height:1.7;margin-bottom:40px;max-width:500px}
+.hero__actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:56px}
+.hero__stats{display:flex;gap:40px;flex-wrap:wrap}
+.hero__stat strong{display:block;font-family:'Manrope',sans-serif;font-size:32px;font-weight:800;color:#fff;line-height:1}
+.hero__stat span{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px;display:block}
+.hero__stat-divider{width:1px;background:rgba(255,255,255,.1)}
+/* HERO CARD */
+.hero__visual{position:relative}
+.hero__card{background:rgba(255,255,255,.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:28px;position:relative}
+.hero__card::before{content:'';position:absolute;inset:0;border-radius:24px;background:linear-gradient(135deg,rgba(74,159,212,.15) 0%,transparent 60%);pointer-events:none}
+.hero__card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.hero__card-title{font-size:15px;font-weight:700;color:#fff}
+.hero__card-badge{font-size:11px;font-weight:700;color:#4ade80;background:rgba(74,222,128,.15);padding:3px 10px;border-radius:99px}
+.hero__bars{display:flex;flex-direction:column;gap:16px;margin-bottom:24px}
+.hero__bar-row{display:flex;flex-direction:column;gap:7px}
+.hero__bar-info{display:flex;justify-content:space-between;align-items:center}
+.hero__bar-label{font-size:12px;color:rgba(255,255,255,.6)}
+.hero__bar-val{font-size:12px;font-weight:700;color:var(--a)}
+.hero__bar-track{height:7px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}
+.hero__bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--a),#6dbfea);animation:growBar 1.6s ease forwards}
+@keyframes growBar{from{width:0}}
+.hero__metrics{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hero__metric{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px;text-align:center}
+.hero__metric strong{display:block;font-family:'Manrope',sans-serif;font-size:22px;font-weight:800;color:var(--a)}
+.hero__metric span{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;display:block}
+/* floating chips */
+.hero__chip{position:absolute;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.95);border-radius:12px;padding:10px 14px;box-shadow:0 8px 32px rgba(0,0,0,.25);font-size:12px;font-weight:600;color:#0f172a;white-space:nowrap;animation:chipFloat 4s ease-in-out infinite alternate}
+@keyframes chipFloat{0%{transform:translateY(0)}100%{transform:translateY(-10px)}}
+.hero__chip--1{top:-20px;right:-30px;animation-delay:.5s}
+.hero__chip--2{bottom:20px;left:-40px;animation-delay:2s}
+.hero__chip-icon{font-size:16px}
+/* ═══════════════ SERVICES ═══════════════ */
+.srv__head{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-bottom:60px;flex-wrap:wrap}
+.srv__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.srv-card{background:#fff;border:1px solid var(--border2);border-radius:var(--r);padding:32px;position:relative;overflow:hidden;transition:transform var(--tr),box-shadow var(--tr),border-color var(--tr)}
+.srv-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--a3) 0%,transparent 50%);opacity:0;transition😮pacity var(--tr)}
+.srv-card:hover{transform:translateY(-8px);box-shadow:var(--sh2);border-color:var(--a)}
+.srv-card:hover::before{opacity:1}
+.srv-card__icon{width:52px;height:52px;border-radius:15px;background:var(--a3);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:20px;transition:transform var(--tr)}
+.srv-card:hover .srv-card__icon{transform:scale(1.1)}
+.srv-card__title{font-family:'Manrope',sans-serif;font-size:18px;font-weight:700;color:#0f172a;margin-bottom:10px}
+.srv-card__text{font-size:14px;color:var(--muted);line-height:1.65}
+.srv-card__tag{display:inline-block;margin-top:16px;font-size:11px;font-weight:700;color:var(--a);background:var(--a3);padding:3px 10px;border-radius:99px}
+.srv-card__number{position:absolute;top:20px;right:24px;font-family:'Manrope',sans-serif;font-size:40px;font-weight:800;color:rgba(74,159,212,.08);line-height:1}
+/* ═══════════════ CASES ═══════════════ */
+.cases__head{margin-bottom:56px}
+.cases__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.case-card{border-radius:var(--r);overflow:hidden;border:1px solid var(--border2);background:#fff;cursor:pointer;transition:transform var(--tr),box-shadow var(--tr)}
+.case-card:hover{transform:translateY(-8px);box-shadow:var(--sh2)}
+.case-card__top{height:88px;display:flex;align-items:center;padding:0 28px;gap:16px;position:relative;overflow:hidden}
+.case-card__top::after{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.15)}
+.case-card__emoji{font-size:36px;z-index:1}
+.case-card__type{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.8);z-index:1}
+.case-card__body{padding:24px}
+.case-card__title{font-family:'Manrope',sans-serif;font-size:17px;font-weight:700;color:#0f172a;margin-bottom:8px}
+.case-card__text{font-size:13.5px;color:var(--muted);line-height:1.6}
+.case-card__chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.chip{font-size:11.5px;font-weight:600;color:var(--a);background:var(--a3);padding:4px 11px;border-radius:99px}
+.case-card__more{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--a);margin-top:14px;padding:6px 12px;background:var(--a3);border-radius:8px;transition:background var(--tr)}
+.case-card:hover .case-card__more{background:#c8e8f6}
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(8,14,26,.6);backdrop-filter:blur(6px);z-index:300;align-items:center;justify-content:center;padding:20px}
+.overlay.show{display:flex}
+.modal{background:#fff;border-radius:22px;max-width:660px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 32px 100px rgba(8,14,26,.24);animation:modalIn .32s cubic-bezier(.4,0,.2,1)}
+@keyframes modalIn{from{opacity:0;transform:scale(.94) translateY(20px)}to{opacity:1;transform:none}}
+.modal__top{padding:28px 30px 0;position:sticky;top:0;background:#fff;border-radius:22px 22px 0 0;z-index:1}
+.modal__top-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.modal__close{width:38px;height:38px;border-radius:10px;border:1.5px solid var(--border2);background:none;font-size:18px;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:background var(--tr),color var(--tr);flex-shrink:0}
+.modal__close:hover{background:var(--bg2);color:#0f172a}
+.modal__emoji{font-size:42px;margin-bottom:8px}
+.modal__type{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--a);margin-bottom:4px}
+.modal__title{font-family:'Manrope',sans-serif;font-size:22px;font-weight:800;color:#0f172a}
+.modal__divider{height:1px;background:var(--border2);margin:20px 0}
+.modal__body{padding:0 30px 30px}
+.modal__block{margin-bottom:22px}
+.modal__block-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:10px}
+.modal__item{display:flex;gap:10px;font-size:14px;color:#334155;line-height:1.55;margin-bottom:8px}
+.modal__item:last-child{margin:0}
+.modal__item-icon{flex-shrink:0;font-size:15px}
+.modal__metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.modal__metric{background:var(--a3);border-radius:12px;padding:14px 16px;text-align:center}
+.modal__metric strong{display:block;font-family:'Manrope',sans-serif;font-size:20px;font-weight:800;color:var(--a)}
+.modal__metric span{font-size:12px;color:var(--muted)}
+/* ═══════════════ WHY ═══════════════ */
+.why__in{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.why__left{}
+.why__right{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.why-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);padding:24px;transition:transform var(--tr),border-color var(--tr),background var(--tr)}
+.why-card:hover{transform:translateY(-5px);border-color:rgba(74,159,212,.4);background:rgba(74,159,212,.08)}
+.why-card__icon{font-size:28px;margin-bottom:14px}
+.why-card__title{font-family:'Manrope',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:8px}
+.why-card__text{font-size:13px;color:rgba(255,255,255,.55);line-height:1.6}
+/* ═══════════════ PROJECTS ═══════════════ */
+.proj__head{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end;margin-bottom:60px}
+.proj__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.proj-card{background:#fff;border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;transition:transform var(--tr),box-shadow var(--tr),border-color var(--tr);display:flex;flex-direction:column}
+.proj-card:hover{transform:translateY(-8px);box-shadow:var(--sh2);border-color:var(--a)}
+.proj-card__banner{height:80px;display:flex;align-items:center;padding:0 28px;gap:16px;border-bottom:1px solid var(--border2);background:linear-gradient(135deg,var(--a3) 0%,#dff0fa 100%)}
+.proj-card__banner-icon{font-size:34px}
+.proj-card__banner-tag{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--a);background:#fff;padding:3px 10px;border-radius:99px;border:1px solid var(--border2)}
+.proj-card__body{padding:26px 28px 28px;flex:1;display:flex;flex-direction:column}
+.proj-card__title{font-family:'Manrope',sans-serif;font-size:16px;font-weight:800;color:#0f172a;margin-bottom:10px;line-height:1.35}
+.proj-card__text{font-size:13.5px;color:var(--muted);line-height:1.7;flex:1}
+.proj-card__chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}
+/* ═══════════════ TECH ═══════════════ */
+.tech__head{margin-bottom:56px}
+.tech__n8n{display:flex;align-items:center;gap:20px;background:var(--dark2);border:1px solid rgba(74,159,212,.2);border-radius:20px;padding:24px 32px;margin-bottom:48px;position:relative;overflow:hidden}
+.tech__n8n::before{content:'';position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(74,159,212,.07);pointer-events:none}
+.tech__n8n-icon{font-size:40px;flex-shrink:0}
+.tech__n8n-title{font-family:'Manrope',sans-serif;font-size:16px;font-weight:800;color:#fff;margin-bottom:5px}
+.tech__n8n-text{font-size:13.5px;color:rgba(255,255,255,.55);line-height:1.6;max-width:700px}
+.tech__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.tech-card{background:#fff;border:1px solid var(--border2);border-radius:var(--r);padding:26px;transition:transform var(--tr),box-shadow var(--tr),border-color var(--tr)}
+.tech-card:hover{transform:translateY(-5px);box-shadow:var(--sh2);border-color:var(--a)}
+.tech-card__head{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.tech-card__icon{width:46px;height:46px;border-radius:13px;background:var(--a3);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.tech-card__title{font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;color:#0f172a}
+.tech-card__list{display:flex;flex-direction:column;gap:8px}
+.tech-card__item{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:#334155;line-height:1.5}
+.tech-card__item::before{content:'→';color:var(--a);font-weight:700;flex-shrink:0;margin-top:1px}
+/* ═══════════════ FAQ ═══════════════ */
+.faq__in{display:grid;grid-template-columns:380px 1fr;gap:80px;align-items:start}
+.faq__left{position:sticky;top:100px}
+.faq__list{display:flex;flex-direction:column;gap:10px}
+.faq-item{border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;transition:border-color var(--tr)}
+.faq-item.open{border-color:var(--a)}
+.faq-item__q{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;cursor:pointer;font-size:15px;font-weight:600;color:#0f172a;gap:16px;user-select:none;transition:background var(--tr)}
+.faq-item__q:hover{background:var(--bg2)}
+.faq-item__icon{width:30px;height:30px;border-radius:8px;background:var(--a3);display:flex;align-items:center;justify-content:center;color:var(--a);font-size:19px;flex-shrink:0;transition:transform var(--tr),background var(--tr)}
+.faq-item.open .faq-item__icon{transform:rotate(45deg);background:var(--a);color:#fff}
+.faq-item__a{max-height:0;overflow:hidden;transition:max-height .38s ease,padding .38s ease;font-size:14px;color:var(--muted);line-height:1.75;padding:0 24px}
+.faq-item.open .faq-item__a{max-height:500px;padding:0 24px 22px}
+/* ═══════════════ CONTACT ═══════════════ */
+.contact__in{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.contact__info{display:flex;flex-direction:column;gap:24px;margin-top:32px}
+.contact__info-item{display:flex;align-items:flex-start;gap:16px}
+.contact__info-icon{width:46px;height:46px;border-radius:13px;background:rgba(74,159,212,.12);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.contact__info-label{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.4);margin-bottom:4px}
+.contact__info-val{font-size:15px;font-weight:600;color:#fff}
+.form{display:flex;flex-direction:column;gap:14px}
+.form__row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form__field{display:flex;flex-direction:column;gap:7px}
+.form__label{font-size:13px;font-weight:600;color:rgba(255,255,255,.6)}
+.form__input,.form__select,.form__textarea{border:1.5px solid rgba(255,255,255,.1);border-radius:12px;padding:13px 16px;font-size:14px;font-family:inherit;color:#fff;background:rgba(255,255,255,.06);transition:border-color var(--tr),box-shadow var(--tr);outline:none}
+.form__input::placeholder,.form__textarea::placeholder{color:rgba(255,255,255,.3)}
+.form__select option{background:#1e293b;color:#fff}
+.form__input:focus,.form__select:focus,.form__textarea:focus{border-color:var(--a);box-shadow:0 0 0 3px rgba(74,159,212,.18)}
+.form__textarea{resize:vertical;min-height:120px}
+.form__note{font-size:12px;color:rgba(255,255,255,.35);line-height:1.5}
+.form__ok{display:none;text-align:center;padding:28px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);border-radius:var(--r);font-weight:600;color:#4ade80;font-size:16px}
+/* ═══════════════ FOOTER ═══════════════ */
+.footer{background:var(--dark);padding:52px 0 36px;border-top:1px solid rgba(255,255,255,.05)}
+.footer__in{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px}
+.footer__logo{display:flex;align-items:center;gap:12px;font-family:'Manrope',sans-serif;font-size:20px;font-weight:800;color:#fff}
+.footer__logo-icon{width:38px;height:38px;border-radius:10px;background:var(--a);display:flex;align-items:center;justify-content:center}
+.footer__logo-icon svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.footer__copy{font-size:13px;color:rgba(255,255,255,.35)}
+.footer__links{display:flex;gap:24px}
+.footer__links a{font-size:13px;color:rgba(255,255,255,.4);transition:color var(--tr)}
+.footer__links a:hover{color:#fff}
+/* ═══════════════ RESPONSIVE ═══════════════ */
+@media(max-width:1080px){
+  .srv__grid{grid-template-columns:repeat(2,1fr)}
+  .cases__grid{grid-template-columns:repeat(2,1fr)}
+  .tech__grid{grid-template-columns:repeat(2,1fr)}
+  .why__right{grid-template-columns:1fr 1fr}
+  .proj__head{grid-template-columns:1fr}
+  .faq__in{grid-template-columns:1fr}
+  .faq__left{position:static}
+}
+@media(max-width:768px){
+  .sec{padding:68px 0}
+  .hero__in{grid-template-columns:1fr;gap:48px;padding:80px 0 60px}
+  .hero__visual{display:none}
+  .nav__links,.nav__cta{display:none}
+  .nav__burger{display:flex}
+  .srv__grid{grid-template-columns:1fr}
+  .cases__grid{grid-template-columns:1fr}
+  .tech__grid{grid-template-columns:1fr}
+  .why__in{grid-template-columns:1fr;gap:48px}
+  .why__right{grid-template-columns:1fr 1fr}
+  .proj__grid{grid-template-columns:1fr}
+  .contact__in{grid-template-columns:1fr;gap:48px}
+  .form__row{grid-template-columns:1fr}
+  .footer__in{flex-direction:column;align-items:flex-start;gap:16px}
+  .tech__n8n{flex-direction:column;align-items:flex-start;gap:12px;padding:22px 24px}
+  .hero__stats{gap:24px}
+  .srv__head{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:480px){
+  .why__right{grid-template-columns:1fr}
+  .modal__metrics{grid-template-columns:1fr 1fr}
+  .hero__actions{flex-direction:column}
+  .proj__head{gap:32px}
+}
+</style>
+</head>
+<body>
+<!-- ════════════════ NAVBAR ════════════════ -->
+<header class="nav" id="nav">
+  <div class="wrap">
+    <div class="nav__in">
+      <a href="#" class="nav__logo">
+        <div class="nav__logo-icon">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        ProcUP
+      </a>
+      <nav class="nav__links">
+        <a href="#services">Услуги</a>
+        <a href="#cases">Кейсы</a>
+        <a href="#projects">Проекты</a>
+        <a href="#tech">Технологии</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Контакты</a>
+      </nav>
+      <div class="nav__cta">
+        <a href="#contact" class="btn btn--fill">Обсудить проект</a>
+      </div>
+      <button class="nav__burger" id="burger" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="mob" id="mob">
+    <a href="#services">Услуги</a>
+    <a href="#cases">Кейсы</a>
+    <a href="#projects">Проекты</a>
+    <a href="#tech">Технологии</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contact">Контакты</a>
+    <a href="#contact" class="btn btn--fill">Обсудить проект</a>
+  </div>
+</header>
+<!-- ════════════════ HERO ════════════════ -->
+<section class="hero">
+  <div class="hero__bg">
+    <div class="hero__grid-lines"></div>
+    <div class="hero__blob hero__blob--1"></div>
+    <div class="hero__blob hero__blob--2"></div>
+    <div class="hero__blob hero__blob--3"></div>
+  </div>
+  <div class="wrap">
+    <div class="hero__in">
+      <div class="fu">
+        <div class="hero__label">
+          <span class="hero__label-dot"></span>
+          Автоматизация малого бизнеса · 2025
+        </div>
+        <h1 class="h1 hero__title">
+          Больше клиентов.<br>
+          Меньше <span>рутины.</span><br>
+          Чистый рост.
+        </h1>
+        <p class="hero__sub">Строим системы на n8n и AI, которые работают 24/7 — от чат-ботов до полных воронок продаж. Ваш бизнес растёт, пока вы занимаетесь главным.</p>
+        <div class="hero__actions">
+          <a href="#contact" class="btn btn--fill">Получить аудит бесплатно →</a>
+          <a href="#cases" class="btn btn--ghost" style="color:#fff;border-color:rgba(255,255,255,.2)">Смотреть кейсы</a>
+        </div>
+        <div class="hero__stats">
+          <div class="hero__stat">
+            <strong>+38%</strong>
+            <span>новых клиентов</span>
+          </div>
+          <div class="hero__stat-divider"></div>
+          <div class="hero__stat">
+            <strong>+25%</strong>
+            <span>повторных продаж</span>
+          </div>
+          <div class="hero__stat-divider"></div>
+          <div class="hero__stat">
+            <strong>12 ч</strong>
+            <span>экономии в неделю</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero__visual fu" data-d="2">
+        <div class="hero__chip hero__chip--1">
+          <span class="hero__chip-icon">⚡</span> Автоматизировано
+        </div>
+        <div class="hero__chip hero__chip--2">
+          <span class="hero__chip-icon">🤖</span> AI работает 24/7
+        </div>
+        <div class="hero__card">
+          <div class="hero__card-head">
+            <span class="hero__card-title">Метрики роста</span>
+            <span class="hero__card-badge">↑ Live</span>
+          </div>
+          <div class="hero__bars">
+            <div class="hero__bar-row">
+              <div class="hero__bar-info">
+                <span class="hero__bar-label">Новые клиенты</span>
+                <span class="hero__bar-val">+38%</span>
+              </div>
+              <div class="hero__bar-track"><div class="hero__bar-fill" style="width:78%"></div></div>
+            </div>
+            <div class="hero__bar-row">
+              <div class="hero__bar-info">
+                <span class="hero__bar-label">Повторные продажи</span>
+                <span class="hero__bar-val">+25%</span>
+              </div>
+              <div class="hero__bar-track"><div class="hero__bar-fill" style="width:62%;animation-delay:.2s"></div></div>
+            </div>
+            <div class="hero__bar-row">
+              <div class="hero__bar-info">
+                <span class="hero__bar-label">Снижение пропусков</span>
+                <span class="hero__bar-val">-40%</span>
+              </div>
+              <div class="hero__bar-track"><div class="hero__bar-fill" style="width:85%;animation-delay:.4s"></div></div>
+            </div>
+            <div class="hero__bar-row">
+              <div class="hero__bar-info">
+                <span class="hero__bar-label">ROI автоматизации</span>
+                <span class="hero__bar-val">380%</span>
+              </div>
+              <div class="hero__bar-track"><div class="hero__bar-fill" style="width:95%;animation-delay:.6s"></div></div>
+            </div>
+          </div>
+          <div class="hero__metrics">
+            <div class="hero__metric">
+              <strong>12 ч</strong>
+              <span>экономии/нед</span>
+            </div>
+            <div class="hero__metric">
+              <strong>3–7</strong>
+              <span>дней на сайт</span>
+            </div>
+            <div class="hero__metric">
+              <strong>24/7</strong>
+              <span>работа бота</span>
+            </div>
+            <div class="hero__metric">
+              <strong>×4</strong>
+              <span>рост откликов</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ════════════════ SERVICES ════════════════ -->
+<section class="sec" id="services">
+  <div class="wrap">
+    <div class="srv__head">
+      <div>
+        <div class="tag fu">Наши услуги</div>
+        <h2 class="h2 fu" data-d="1">Что мы делаем<br>для вашего бизнеса</h2>
+      </div>
+      <p class="sub fu" data-d="2">Комплексные решения для роста — от создания сайтов до полной автоматизации процессов на базе AI.</p>
+    </div>
+    <div class="srv__grid">
+      <div class="srv-card fu" data-d="1">
+        <span class="srv-card__number">01</span>
+        <div class="srv-card__icon">⏰</div>
+        <h3 class="srv-card__title">+5–15 часов в неделю</h3>
+        <p class="srv-card__text">Автоматизация рутинных задач вашего бизнеса на базе n8n. Запись клиентов, напоминания, обработка заявок — без вашего участия.</p>
+        <span class="srv-card__tag">Автоматизация</span>
+      </div>
+      <div class="srv-card fu" data-d="2">
+        <span class="srv-card__number">02</span>
+        <div class="srv-card__icon">🤖</div>
+        <h3 class="srv-card__title">Чат-бот 24/7</h3>
+        <p class="srv-card__text">Умный Telegram-бот отвечает клиентам, записывает, напоминает и обрабатывает возражения — даже когда вы спите.</p>
+        <span class="srv-card__tag">AI-бот</span>
+      </div>
+      <div class="srv-card fu" data-d="3">
+        <span class="srv-card__number">03</span>
+        <div class="srv-card__icon">🌐</div>
+        <h3 class="srv-card__title">Сайт за 3–7 дней</h3>
+        <p class="srv-card__text">Продающий лендинг или полноценный сайт с адаптивной вёрсткой, SEO-базой и интеграцией с вашими инструментами.</p>
+        <span class="srv-card__tag">Разработка</span>
+      </div>
+      <div class="srv-card fu" data-d="1">
+        <span class="srv-card__number">04</span>
+        <div class="srv-card__icon">📊</div>
+        <h3 class="srv-card__title">CRM + воронка +25%</h3>
+        <p class="srv-card__text">Настройка CRM, автоматические воронки продаж и персонализированные рассылки, которые превращают лиды в покупателей.</p>
+        <span class="srv-card__tag">CRM & Email</span>
+      </div>
+      <div class="srv-card fu" data-d="2">
+        <span class="srv-card__number">05</span>
+        <div class="srv-card__icon">🔍</div>
+        <h3 class="srv-card__title">Аудит за 1 встречу</h3>
+        <p class="srv-card__text">Находим точки роста и узкие места в вашем бизнесе за одну встречу. Получаете конкретный план действий с цифрами.</p>
+        <span class="srv-card__tag">Консалтинг</span>
+      </div>
+      <div class="srv-card fu" data-d="3">
+        <span class="srv-card__number">06</span>
+        <div class="srv-card__icon">📱</div>
+        <h3 class="srv-card__title">Контент-машина для SMM</h3>
+        <p class="srv-card__text">AI-конвейер, который автоматически создаёт, адаптирует и публикует контент на 9+ платформах по расписанию.</p>
+        <span class="srv-card__tag">AI-контент</span>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ════════════════ CASES ════════════════ -->
+<section class="sec sec--alt" id="cases">
+  <div class="wrap">
+    <div class="cases__head">
+      <div class="tag fu">Результаты клиентов</div>
+      <h2 class="h2 fu" data-d="1">Реальные кейсы,<br>реальные цифры</h2>
+    </div>
+    <div class="cases__grid">
+      <div class="case-card fu" data-d="1" onclick="openModal('coffee')">
+        <div class="case-card__top" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">
+          <span class="case-card__emoji">☕</span>
+          <span class="case-card__type">Кофейня</span>
+        </div>
+        <div class="case-card__body">
+          <h3 class="case-card__title">Автоматизация кофейни</h3>
+          <p class="case-card__text">Внедрили систему автоматических заказов и программу лояльности. Владелец освободил 3 часа в день.</p>
+          <div class="case-card__chips">
+            <span class="chip">−3 ч/день</span>
+            <span class="chip">+18% выручка</span>
+          </div>
+          <span class="case-card__more">Подробнее →</span>
+        </div>
+      </div>
+      <div class="case-card fu" data-d="2" onclick="openModal('barber')">
+        <div class="case-card__top" style="background:linear-gradient(135deg,#0f172a,#1e3a5f)">
+          <span class="case-card__emoji">✂️</span>
+          <span class="case-card__type">Барбершоп</span>
+        </div>
+        <div class="case-card__body">
+          <h3 class="case-card__title">Онлайн-запись барбершопа</h3>
+          <p class="case-card__text">Чат-бот с автозаписью и умными напоминаниями. Пропуски упали на 40%, выручка от повторников выросла.</p>
+          <div class="case-card__chips">
+            <span class="chip">−40% пропусков</span>
+            <span class="chip">+22% повторники</span>
+          </div>
+          <span class="case-card__more">Подробнее →</span>
+        </div>
+      </div>
+      <div class="case-card fu" data-d="3" onclick="openModal('flowers')">
+        <div class="case-card__top" style="background:linear-gradient(135deg,#be185d,#ec4899)">
+          <span class="case-card__emoji">💐</span>
+          <span class="case-card__type">Цветочный киоск</span>
+        </div>
+        <div class="case-card__body">
+          <h3 class="case-card__title">CRM для цветочного киоска</h3>
+          <p class="case-card__text">Система напоминаний о праздниках клиентов и персональные предложения. ROI автоматизации — 380%.</p>
+          <div class="case-card__chips">
+            <span class="chip">+25% повторные</span>
+            <span class="chip">ROI 380%</span>
+          </div>
+          <span class="case-card__more">Подробнее →</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ════════════════ WHY ════════════════ -->
+<section class="sec sec--dark" id="why">
+  <div class="wrap">
+    <div class="why__in">
+      <div class="fu">
+        <div class="tag tag--white">Почему ProcUP</div>
+        <h2 class="h2 h2--white" style="margin-bottom:20px">Мы не просто<br>подрядчики</h2>
+        <p class="sub sub--white" style="margin-bottom:36px">Мы вникаем в бизнес-процессы, находим узкие места и строим системы, которые масштабируются вместе с вами — без лишних звонков и "уточним позже".</p>
+        <a href="#contact" class="btn btn--fill">Начать бесплатно →</a>
+      </div>
+      <div class="why__right fu" data-d="2">
+        <div class="why-card">
+          <div class="why-card__icon">⚡</div>
+          <h4 class="why-card__title">Быстрый старт</h4>
+          <p class="why-card__text">Первые результаты уже через 3–7 дней. Никаких месяцев ожидания.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card__icon">🧠</div>
+          <h4 class="why-card__title">AI в основе</h4>
+          <p class="why-card__text">Используем самые свежие AI-инструменты для максимального эффекта.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card__icon">📈</div>
+          <h4 class="why-card__title">Измеримый ROI</h4>
+          <p class="why-card__text">Каждое решение обоснованы цифрами. Вы знаете, что получаете за деньги.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card__icon">🔧</div>
+          <h4 class="why-card__title">Поддержка 24/7</h4>
+          <p class="why-card__text">Мы на связи после сдачи проекта. Всегда готовы доработать и улучшить.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card__icon">🎯</div>
+          <h4 class="why-card__title">Под ваш бизнес</h4>
+          <p class="why-card__text">Никаких шаблонных решений. Только индивидуальный подход к задаче.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card__icon">🔒</div>
+          <h4 class="why-card__title">Безопасность</h4>
+          <p class="why-card__text">SSL, бэкапы, защита данных клиентов — всё по стандартам 2025 года.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ════════════════ PROJECTS ════════════════ -->
+<section class="sec" id="projects">
+  <div class="wrap">
+    <div class="proj__head">
+      <div>
+        <div class="tag fu">Наши проекты</div>
+        <h2 class="h2 fu" data-d="1">Что мы уже<br>запустили</h2>
+      </div>
+      <p class="sub fu" data-d="2">Готовые AI-продукты и автоматизации, которые уже экономят десятки часов и генерируют выручку нашим клиентам.</p>
+    </div>
+    <div class="proj__grid">
+      <div class="proj-card fu" data-d="1">
+        <div class="proj-card__banner">
+          <span class="proj-card__banner-icon">🤖</span>
+          <span class="proj-card__banner-tag">TG-бот · AI</span>
+        </div>
+        <div class="proj-card__body">
+          <h3 class="proj-card__title">Виртуальный сотрудник в Telegram</h3>
+          <p class="proj-card__text">Готовый бот, который работает 24/7. Он вклеивает встречу в календарь голосом, пока вы за рулём, или даёт выжимку из важных писем за кофе. Автоматизация сокращает время на планирование и проверку коммуникаций на 30–40%.</p>
+          <div class="proj-card__chips">
+            <span class="chip">−30–40% времени</span>
+            <span class="chip">Голосовой ввод</span>
+            <span class="chip">Календарь</span>
+            <span class="chip">Email-дайджест</span>
+          </div>
+        </div>
+      </div>
+      <div class="proj-card fu" data-d="2">
+        <div class="proj-card__banner">
+          <span class="proj-card__banner-icon">🎬</span>
+          <span class="proj-card__banner-tag">n8n · TikTok · AI-аватар</span>
+        </div>
+        <div class="proj-card__body">
+          <h3 class="proj-card__title">AI-конвейер клонирования вирусных TikTok-роликов</h3>
+          <p class="proj-card__text">Из одной ссылки на TikTok создаёт уникальное видео с AI-аватаром, адаптирует контент и публикует на 9 платформах. Бот получает ссылку в Telegram и через 15–20 минут выдаёт готовый ролик с новым сценарием, озвучкой и субтитрами — и сам постит в Instagram, YouTube, TikTok, Facebook, Threads, Twitter, LinkedIn, Bluesky и Pinterest.</p>
+          <div class="proj-card__chips">
+            <span class="chip">9 платформ</span>
+            <span class="chip">~15 мин</span>
+            <span class="chip">AI-аватар</span>
+            <span class="chip">Автопостинг</span>
+          </div>
+        </div>
+      </div>
+      <div class="proj-card fu" data-d="1">
+        <div class="proj-card__banner">
+          <span class="proj-card__banner-icon">✉️</span>
+          <span class="proj-card__banner-tag">n8n · GPT · Cold Email</span>
+        </div>
+        <div class="proj-card__body">
+          <h3 class="proj-card__title">Глубокая персонализация холодных писем на AI</h3>
+          <p class="proj-card__text">Превращает сырые списки лидов в уникальные icebreaker-сообщения. Система изучает сайт каждой компании, выделяет ключевые страницы, суммирует их GPT и генерирует письмо, демонстрирующее истинное понимание бизнеса. Результат — кратный рост откликов и экономия десятков часов в неделю.</p>
+          <div class="proj-card__chips">
+            <span class="chip">×4 отклики</span>
+            <span class="chip">Авто-анализ сайта</span>
+            <span class="chip">GPT-персонализация</span>
+          </div>
+        </div>
+      </div>
+      <div class="proj-card fu" data-d="2">
+        <div class="proj-card__banner">
+          <span class="proj-card__banner-icon">📸</span>
+          <span class="proj-card__banner-tag">n8n · Instagram · AI-фото</span>
+        </div>
+        <div class="proj-card__body">
+          <h3 class="proj-card__title">Автоматизированная фабрика контента для Instagram</h3>
+          <p class="proj-card__text">Отслеживает популярные публикации по хэштегам, анализирует их, генерирует уникальные изображения с помощью ИИ и публикует по расписанию. Постоянный поток трендового контента без участия человека — охваты растут, вы не тратите на это ни минуты.</p>
+          <div class="proj-card__chips">
+            <span class="chip">Авто-тренды</span>
+            <span class="chip">AI-генерация фото</span>
+            <span class="chip">Публикация по расписанию</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ════════════════ TECH ════════════════ -->
+<section class="sec sec--alt" id="tech">
+  <div class="wrap">
+    <div class="tech__head">
+      <div class="tag fu">Стек и инструменты</div>
+      <h2 class="h2 fu" data-d="1" style="margin-bottom:12px">Что используем<br>в работе</h2>
+      <p class="sub fu" data-d="2">Проверенный набор технологий, который решает задачи малого бизнеса быстро, надёжно и без лишних затрат.</p>
+    </div>
+    <div class="tech__n8n fu">
+      <span class="tech__n8n-icon">⚙️</span>
+      <div>
+        <div class="tech__n8n-title">n8n — основа нашей автоматизации</div>
+        <p class="tech__n8n-text">В основном мы работаем на n8n и аналогах, так как они позволяют экономить время и выполнять громадный спектр задач: от простых уведомлений до сложных AI-конвейеров с десятками шагов. No-code + full-code — лучшее из двух миров.</p>
+      </div>
+    </div>
+    <div class="tech__grid">
+      <div class="tech-card fu" data-d="1">
+        <div class="tech-card__head">
+          <div class="tech-card__icon">🎨</div>
+          <span class="tech-card__title">Дизайн и сайты</span>
+        </div>
+        <ul class="tech-card__list">
+          <li class="tech-card__item">Photoshop / Illustrator — графика</li>
+          <li class="tech-card__item">WordPress + Elementor / Gutenberg</li>
+          <li class="tech-card__item">Tilda — быстрые лендинги</li>
+          <li class="tech-card__item">Webflow — визуальная верстка</li>
+        </ul>
+      </div>
+      <div class="tech-card fu" data-d="2">
+        <div class="tech-card__head">
+          <div class="tech-card__icon">🛒</div>
+          <span class="tech-card__title">E-commerce</span>
+        </div>
+        <ul class="tech-card__list">
+          <li class="tech-card__item">WooCommerce — интернет-магазин</li>
+          <li class="tech-card__item">Ecwid — лёгкая интеграция</li>
+          <li class="tech-card__item">YooKassa / Stripe — оплата онлайн</li>
+        </ul>
+      </div>
+      <div class="tech-card fu" data-d="3">
+        <div class="tech-card__head">
+          <div class="tech-card__icon">💻</div>
+          <span class="tech-card__title">Фронтенд / Верстка</span>
+        </div>
+        <ul class="tech-card__list">
+          <li class="tech-card__item">HTML5, CSS3, mobile-first</li>
+          <li class="tech-card__item">Vanilla JS + Alpine.js</li>
+          <li class="tech-card__item">Bootstrap / Tailwind</li>
+        </ul>
+      </div>
+      <div class="tech-card fu" data-d="1">
+        <div class="tech-card__head">
+          <div class="tech-card__icon">☁️</div>
+          <span class="tech-card__title">Хостинг и деплой</span>
+        </div>
+        <ul class="tech-card__list">
+          <li class="tech-card__item">VPS / cPanel хостинг</li>
+          <li class="tech-card__item">DigitalOcean / Hetzner</li>
+          <li class="tech-card__item">Netlify / Vercel для статики</li>
+        </ul>
+      </div>
+      <div class="tech-card fu" data-d="2">
+        <div class="tech-card__head">
+          <div class="tech-card__icon">📊</div>
+          <span class="tech-card__title">Аналитика и маркетинг</span>
+        </div>
+        <ul class="tech-card__list">
+          <li class="tech-card__item">Google Analytics / Tag Manager</li>
+          <li class="tech-card__item">Yandex.Metrica</li>
+          <li class="tech-card__item">Mailchimp / SendPulse / MailerLite</li>
+          <li class="tech-card__item">Telegram-бот по API</li>
+        </ul>
+      </div>
+      <div class="tech-card fu" data-d="3">
+        <div class="tech-card__head">
+          <div class="tech-card__icon">🔒</div>
+          <span class="tech-card__title">Безопасность и SEO</span>
+        </div>
+        <ul class="tech-card__list">
+          <li class="tech-card__item">SSL — Let's Encrypt (бесплатно)</li>
+          <li class="tech-card__item">Регулярные бэкапы</li>
+          <li class="tech-card__item">Кеш, минификация, сжатие</li>
+          <li class="tech-card__item">Git / GitHub, FTP/SFTP</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ════════════════ FAQ ════════════════ -->
+<section class="sec" id="faq">
+  <div class="wrap">
+    <div class="faq__in">
+      <div class="faq__left fu">
+        <div class="tag">FAQ</div>
+        <h2 class="h2" style="margin-bottom:16px">Частые<br>вопросы</h2>
+        <p class="sub" style="margin-bottom:32px">Не нашли ответа? Напишите нам — ответим в течение часа.</p>
+        <a href="#contact" class="btn btn--fill">Задать вопрос →</a>
+      </div>
+      <div class="faq__list fu" data-d="2">
+        <div class="faq-item">
+          <div class="faq-item__q" onclick="toggleFaq(this)">
+            Сколько времени занимает внедрение?
+            <span class="faq-item__icon">+</span>
+          </div>
+          <div class="faq-item__a">Простой лендинг — 3–7 дней. Чат-бот — 3–5 дней. Полная автоматизация бизнес-процессов — от 2 недель. На первой встрече обсуждаем сроки и фиксируем в договоре.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-item__q" onclick="toggleFaq(this)">
+            Сколько это стоит?
+            <span class="faq-item__icon">+</span>
+          </div>
+          <div class="faq-item__a">Стоимость зависит от объёма задач. Лендинг — от 25 000 ₽, чат-бот — от 15 000 ₽, комплексная автоматизация — от 50 000 ₽. Первый аудит — бесплатно. После встречи выдаём точное КП.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-item__q" onclick="toggleFaq(this)">
+            Нужны ли технические знания с моей стороны?
+            <span class="faq-item__icon">+</span>
+          </div>
+          <div class="faq-item__a">Абсолютно нет. Мы берём на себя всю техническую сторону. Вы получаете готовое решение с понятными инструкциями и поддержкой. Если что-то сломается — мы починим.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-item__q" onclick="toggleFaq(this)">
+            Вы работаете только с определёнными нишами?
+            <span class="faq-item__icon">+</span>
+          </div>
+          <div class="faq-item__a">Нет. Мы работаем с любым малым бизнесом: салоны красоты, кофейни, магазины, барбершопы, цветочные киоски, онлайн-школы, фрилансеры. Опыт есть в 15+ нишах.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-item__q" onclick="toggleFaq(this)">
+            Что будет после сдачи проекта?
+            <span class="faq-item__icon">+</span>
+          </div>
+          <div class="faq-item__a">Мы остаёмся на связи. Техническая поддержка входит в стоимость на первый месяц. Далее — по договорённости. Большинство клиентов продолжают работать с нами на развитие.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-item__q" onclick="toggleFaq(this)">
+            Гарантируете ли вы результат?
+            <span class="faq-item__icon">+</span>
+          </div>
+          <div class="faq-item__a">Мы честно говорим о прогнозах на первой встрече. Если проект не даёт заявленных результатов в разумный срок — дорабатываем бесплатно. Нам важна ваша лояльность, а не разовая оплата.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ════════════════ CONTACT ════════════════ -->
+<section class="sec sec--dark" id="contact">
+  <div class="wrap">
+    <div class="contact__in">
+      <div class="fu">
+        <div class="tag tag--white">Связаться с нами</div>
+        <h2 class="h2 h2--white" style="margin-bottom:16px">Начнём<br>вместе?</h2>
+        <p class="sub sub--white" style="margin-bottom:40px">Расскажите о задаче — мы ответим в течение часа и предложим решение с конкретными цифрами.</p>
+        <div class="contact__info">
+          <div class="contact__info-item">
+            <div class="contact__info-icon">📞</div>
+            <div>
+              <div class="contact__info-label">Телефон</div>
+              <div class="contact__info-val">+7 985 941‑44‑01</div>
+              <div class="contact__info-val">+7 993 343‑66‑18</div>
+            </div>
+          </div>
+          <div class="contact__info-item">
+            <div class="contact__info-icon">✈️</div>
+            <div>
+              <div class="contact__info-label">Telegram</div>
+              <div class="contact__info-val">@procup_team</div>
+            </div>
+          </div>
+          <div class="contact__info-item">
+            <div class="contact__info-icon">⏱️</div>
+            <div>
+              <div class="contact__info-label">Время ответа</div>
+              <div class="contact__info-val">В течение 1 часа</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="fu" data-d="2">
+        <form class="form" id="contactForm" onsubmit="submitForm(event)">
+          <div class="form__row">
+            <div class="form__field">
+              <label class="form__label">Имя *</label>
+              <input class="form__input" type="text" placeholder="Иван Петров" required/>
+            </div>
+            <div class="form__field">
+              <label class="form__label">Телефон / Telegram *</label>
+              <input class="form__input" type="text" placeholder="+7 999 000 00 00" required/>
+            </div>
+          </div>
+          <div class="form__field">
+            <label class="form__label">Ниша бизнеса</label>
+            <select class="form__select">
+              <option value="">Выберите нишу</option>
+              <option>Барбершоп / Салон красоты</option>
+              <option>Кофейня / Ресторан</option>
+              <option>Цветочный магазин</option>
+              <option>Интернет-магазин</option>
+              <option>Онлайн-школа / Эксперт</option>
+              <option>Другое</option>
+            </select>
+          </div>
+          <div class="form__field">
+            <label class="form__label">Что нужно сделать?</label>
+            <textarea class="form__textarea" placeholder="Опишите задачу: хочу автоматизировать запись клиентов, нужен сайт, интересует чат-бот..."></textarea>
+          </div>
+          <p class="form__note">Нажимая кнопку, вы соглашаетесь с обработкой персональных данных. Мы не передаём их третьим лицам.</p>
+          <button type="submit" class="btn btn--fill" style="width:100%;justify-content:center">Отправить заявку →</button>
+          <div class="form__ok" id="formOk">✅ Заявка отправлена! Свяжемся в течение часа.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ════════════════ FOOTER ════════════════ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__in">
+      <div class="footer__logo">
+        <div class="footer__logo-icon">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        ProcUP
+      </div>
+      <span class="footer__copy">© 2025 ProcUP. Автоматизация малого бизнеса.</span>
+      <div class="footer__links">
+        <a href="#services">Услуги</a>
+        <a href="#cases">Кейсы</a>
+        <a href="#contact">Контакты</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- ════════════════ MODALS ════════════════ -->
+<div class="overlay" id="overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal__top">
+      <div class="modal__top-row">
+        <div>
+          <div class="modal__emoji" id="m-emoji"></div>
+          <div class="modal__type" id="m-type"></div>
+          <div class="modal__title" id="m-title"></div>
+        </div>
+        <button class="modal__close" onclick="closeModalBtn()">✕</button>
+      </div>
+      <div class="modal__divider"></div>
+    </div>
+    <div class="modal__body" id="m-body"></div>
+  </div>
+</div>
+<script>
+/* ── NAVBAR SCROLL ── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>20)
+})
+/* ── BURGER ── */
+document.getElementById('burger').addEventListener('click',()=>{
+  document.getElementById('mob').classList.toggle('open')
+})
+document.querySelectorAll('.mob a').forEach(a=>a.addEventListener('click',()=>{
+  document.getElementById('mob').classList.remove('open')
+}))
+/* ── INTERSECTION OBSERVER ── */
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}})
+},{threshold:.12})
+document.querySelectorAll('.fu').forEach(el=>io.observe(el))
+/* ── FAQ ── */
+function toggleFaq(el){
+  const item=el.parentElement
+  const isOpen=item.classList.contains('open')
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'))
+  if(!isOpen)item.classList.add('open')
+}
+/* ── MODAL DATA ── */
+const caseData={
+  coffee:{
+    emoji:'☕',type:'Кейс · Кофейня',title:'Автоматизация кофейни',
+    body:`
+      <div class="modal__block">
+        <div class="modal__block-label">Задача</div>
+        <div class="modal__item"><span class="modal__item-icon">📌</span>Владелец тратил 3+ часа в день на ручную обработку заказов, учёт запасов и программу лояльности.</div>
+      </div>
+      <div class="modal__block">
+        <div class="modal__block-label">Что сделали</div>
+        <div class="modal__item"><span class="modal__item-icon">✅</span>Автоматическая обработка онлайн-заказов через Telegram-бота</div>
+        <div class="modal__item"><span class="modal__item-icon">✅</span>Программа лояльности с персональными предложениями на дни рождения</div>
+        <div class="modal__item"><span class="modal__item-icon">✅</span>Автоматический учёт заказов и уведомления на кухню</div>
+        <div class="modal__item"><span class="modal__item-icon">✅</span>Еженедельные отчёты о выручке без ручного подсчёта</div>
+      </div>
+      <div class="modal__block">
+        <div class="modal__block-label">Результаты</div>
+        <div class="modal__metrics">
+          <div class="modal__metric"><strong>−3 ч</strong><span>экономии в день</span></div>
+          <div class="modal__metric"><strong>+18%</strong><span>рост выручки</span></div>
+          <div class="modal__metric"><strong>×2</strong><span>повторные заказы</span></div>
+          <div class="modal__metric"><strong>7 дней</strong><span>срок внедрения</span></div>
+        </div>
+      </div>`
+  },
+  barber:{
+    emoji:'✂️',type:'Кейс · Барбершоп',title:'Онлайн-запись и снижение пропусков',
+    body:`
+      <div class="modal__block">
+        <div class="modal__block-label">Задача</div>
+        <div class="modal__item"><span class="modal__item-icon">📌</span>Барбершоп терял выручку из-за пропущенных записей и отсутствия системы возврата клиентов.</div>
+      </div>
+      <div class="modal__block">
+        <div class="modal__block-label">Что сделали</div>
+        <div class="modal__item"><span class="modal__item-icon">✅</span>Чат-бот для записи с выбором мастера и времени</div>
+        <div class="modal__item"><span class="modal__item-icon">✅</span>Серия напоминаний: за 24 ч и за 2 ч до визита</div>
+        <div class="modal__item"><span class="modal__item-icon">✅</span>Автоматические сообщения через 4 недели с предложением повторной записи</div>
+        <div class="modal__item"><span class="modal__item-icon">✅</span>Сбор отзывов после каждого визита</div>
+      </div>
+      <div class="modal__block">
+        <div class="modal__block-label">Результаты</div>
+        <div class="modal__metrics">
+          <div class="modal__metric"><strong>−40%</strong><span>пропусков записей</span></div>
+          <div class="modal__metric"><strong>+22%</strong><span>повторные визиты</span></div>
+          <div class="modal__metric"><strong>4.9★</strong><span>средняя оценка</span></div>
+          <div class="modal__metric"><strong>5 дней</strong><span>срок внедрения</span></div>
+        </div>
+      </div>`
+  },
+  flowers:{
+    emoji:'💐',type:'Кейс · Цветочный киоск',title:'CRM и возврат клиентов',
+    body:`
+      <div class="modal__block">
+        <div class="modal__block-label">Задача</div>
+        <div class="modal__item"><span class="modal__item-icon">📌</span>Большинство клиентов покупали цветы один раз. Нужна была система, которая возвращает их снова и снова.</div>
+      </div>
+      <div class="modal__block">
+        <div class="modal__block-label">Что сделали</div>
+        <div class="modal__item"><span class="modal__item-icon">✅</span>CRM с записью дат рождения и годовщин клиентов</div>
+        <div class="modal__item"><span class="modal__item-icon">✅</span>Автоматические напоминания за 3 дня до важной даты</div>
+        <div class="modal__item"><span class="modal__item-icon">✅</span>Персональные предложения на основе истории покупок</div>
+        <div class="modal__item"><span class="modal__item-icon">✅</span>Программа накопительных баллов через Telegram</div>
+      </div>
+      <div class="modal__block">
+        <div class="modal__block-label">Результаты</div>
+        <div class="modal__metrics">
+          <div class="modal__metric"><strong>+25%</strong><span>повторные покупки</span></div>
+          <div class="modal__metric"><strong>380%</strong><span>ROI автоматизации</span></div>
+          <div class="modal__metric"><strong>+31%</strong><span>средний чек</span></div>
+          <div class="modal__metric"><strong>14 дней</strong><span>до первых продаж</span></div>
+        </div>
+      </div>`
+  }
+}
+function openModal(key){
+  const d=caseData[key]
+  document.getElementById('m-emoji').textContent=d.emoji
+  document.getElementById('m-type').textContent=d.type
+  document.getElementById('m-title').textContent=d.title
+  document.getElementById('m-body').innerHTML=d.body
+  document.getElementById('overlay').classList.add('show')
+  document.body.style.overflow='hidden'
+}
+function closeModal(e){if(e.target===document.getElementById('overlay'))closeModalBtn()}
+function closeModalBtn(){
+  document.getElementById('overlay').classList.remove('show')
+  document.body.style.overflow=''
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModalBtn()})
+/* ── FORM ── */
+function submitForm(e){
+  e.preventDefault()
+  const btn=e.target.querySelector('button[type=submit]')
+  btn.textContent='Отправляем...'
+  btn.disabled=true
+  setTimeout(()=>{
+    e.target.querySelector('button[type=submit]').style.display='none'
+    document.getElementById('formOk').style.display='block'
+    e.target.reset()
+  },1200)
+}
+</script>
+</body>
+</html>
+```__
